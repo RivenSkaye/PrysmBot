@@ -30,6 +30,7 @@ with open("Prysm.json", "r") as prysmjson:
     base_info = json.load(prysmjson)
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
+print(os.getcwd())
 
 @bot.event
 async def on_ready():
@@ -52,10 +53,10 @@ async def on_command_error(ctx, err):
 @bot.command(name="restart", help="Pulls in latest git code and restarts to load it in. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
-    os.popen("git pull")
     saveJSON("Prysm.json", base_info)
-    await bot.close()
-    os.execv("Prysm.py", [""])
+    print("bot ded")
+    os.exec("git pull && echo 'POOF'")
+    os.exec("Prysm.py", [""])
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
