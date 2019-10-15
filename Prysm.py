@@ -32,7 +32,7 @@ with open("Prysm.json", "r") as prysmjson:
     base_info = json.load(prysmjson)
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
-print(os.getcwd())
+print("Bot was updated succesfully")
 
 @bot.event
 async def on_ready():
@@ -57,7 +57,7 @@ async def on_command_error(ctx, err):
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
     subprocess.Popen(["git", "pull"])
-    print("bot restarting, if you read this it works!!")
+    print("bot restarting")
     await bot.close()
     os.execv(sys.executable, ["python"]+sys.argv)
 
