@@ -32,7 +32,7 @@ with open("Prysm.json", "r") as prysmjson:
     base_info = json.load(prysmjson)
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
-print("Bot was updated succesfully. Again!")
+print("Bot updated")
 
 @bot.event
 async def on_ready():
@@ -56,8 +56,10 @@ async def on_command_error(ctx, err):
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
-    subprocess.Popen(["git", "pull"])
+    p = subprocess.Popen(["git", "pull"])
+    p.wait()
     print("bot restarting")
+
     os.execv(sys.executable, ["python"]+sys.argv)
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
