@@ -54,8 +54,8 @@ async def on_command_error(ctx, err):
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
-    print("bot ded")
-    os.exec("git pull && echo 'POOF'")
+    print("bot ded and updated")
+    os.exec("git pull")
     os.exec("Prysm.py", [""])
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
