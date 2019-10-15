@@ -32,7 +32,6 @@ with open("Prysm.json", "r") as prysmjson:
     base_info = json.load(prysmjson)
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
-print("Bot updated from web UI!")
 
 @bot.event
 async def on_ready():
@@ -49,17 +48,16 @@ async def on_ready():
 # async def initMessage(guild, channel):
 @bot.event
 async def on_command_error(ctx, err):
-    if isinstance(err.original, discord.ext.commands.MissingPermissions):
-        ctx.channel.send("Sorry %s, it seems you lack the permission %s" % (ctx.author.mention(), ", ".join(err.original.missing_perms)))
+    if isinstance(err, discord.ext.commands.MissingPermissions):
+        await ctx.channel.send("Sorry %s, it seems you lack the permission %s" % (ctx.author.mention(), err.missing_perms))
 
 @bot.command(name="restart", help="Pulls in latest git code and restarts to load it in. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
     p = subprocess.Popen(["git", "pull"])
+    await ctx.channel.send("I'm now updating and restarting. As soon as I'm back, you can use me again!")
     p.wait()
-    print("bot restarting")
-
     os.execv(sys.executable, ["python"]+sys.argv)
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
