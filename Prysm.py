@@ -58,7 +58,6 @@ async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
     subprocess.Popen(["git", "pull"])
     print("bot restarting")
-    await bot.close()
     os.execv(sys.executable, ["python"]+sys.argv)
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
