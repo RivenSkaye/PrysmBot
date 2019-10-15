@@ -22,6 +22,7 @@
 #
 #
 import os
+import subprocess
 import json
 import discord
 import discord.ext.commands
@@ -54,9 +55,9 @@ async def on_command_error(ctx, err):
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
+    subprocess.Popen(["git", "pull"])
     print("bot ded and updated")
-    os.exec("git pull")
-    os.exec("Prysm.py", [""])
+    os.execl(sys.executable, "Prysm.py")
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
