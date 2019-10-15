@@ -32,7 +32,7 @@ with open("Prysm.json", "r") as prysmjson:
     base_info = json.load(prysmjson)
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
-print("Bot updated")
+print("Bot updated from web UI!")
 
 @bot.event
 async def on_ready():
