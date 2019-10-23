@@ -28,8 +28,19 @@ import json
 import discord
 import discord.ext.commands
 
-with open("Prysm.json", "r") as prysmjson:
-    base_info = json.load(prysmjson)
+try :
+    with open("Prysm.json", "r") as prysmjson:
+        base_info = json.load(prysmjson)
+        assert (len(str(base_info["Token"])) < 1), "No token given! Fix your Prysm.json!"
+except FileNotFoundError:
+    with open("Prysm.json", "w+") as prysmjson:
+        prysmjson.write("{\r\n    \"Token\": \"\",\r\n    \"Guilds\": {}\r\n}")
+        print("There was no Prysm.py found; It was created, now add the Token for the bot.")
+    exit(1)
+except AssertionError:
+    print("No token given! Fix your Prysm.json!")
+    exit(1)
+
 guilds = base_info["Guilds"]
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
 
