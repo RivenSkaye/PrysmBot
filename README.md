@@ -1,9 +1,9 @@
-#An open source Discord utility bot written in Python 3.x
+# An open source Discord utility bot written in Python 3.x
 
 This is a personal use bot and isn't hosted anywhere as of yet.
 If hosting for multiple servers becomes a viable option, it might be offered.
 
-##Hosting it yourself
+## Hosting it yourself
 You are required to create a file called Prysm.json that contains at least:
 ```
 {
