@@ -31,7 +31,8 @@ import discord.ext.commands
 try :
     with open("Prysm.json", "r") as prysmjson:
         base_info = json.load(prysmjson)
-        assert (len(str(base_info["Token"])) < 1), "No token given! Fix your Prysm.json!"
+        print(base_info["Token"])
+        assert (len(base_info["Token"]) > 0), "No token given! Fix your Prysm.json!"
 except FileNotFoundError:
     with open("Prysm.json", "w+") as prysmjson:
         prysmjson.write("{\r\n    \"Token\": \"\",\r\n    \"Guilds\": {}\r\n}")
@@ -46,7 +47,7 @@ bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, comm
 
 @bot.event
 async def on_ready():
-    bot.change_presence(name="to the boss", type=discord.ActivityType.listening)
+    await bot.change_presence(activity=discord.Activity(name="the boss", type=discord.ActivityType.listening))
     for guild in bot.guilds:
         if str(guild.id) in guilds.keys():
             print("Guild found: %s" % guilds[str(guild.id)])
@@ -54,7 +55,7 @@ async def on_ready():
             print("New guild! %s" % guild.name)
             guilds[str(guild.id)] = guild.name
             print(guilds)
-        if os.isfile(str("Gulds/"+guild.id+".json")):
+        if os.path.isfile(str("Gulds/"+str(guild.id)+".json")):
             with open(str("Guilds/"+guild.id+".json")) as gjson:
                 g = json.load(g.json)
                 e = discord.Embed(title="Prysm started", description="This is a message to let all users know Prysm is online and receptive for input.", colour=discord.Colour.from_rgb(172, 85, 172))
@@ -71,7 +72,7 @@ async def on_command_error(ctx, err):
 @bot.command(name="setInit", help="Sets what channel to send a message signaling the bot is online. Requires the 'manage channels' permission.", pass_context=True)
 @discord.ext.commands.has_permissions(manage_channels=True)
 async def cmd_setInit(ctx):
-    channeljson = open(str("Guilds/"+ctx.guild.id+".json"), "r+")
+    channeljson = open(str("Guilds/"+ctx.guild.id+".json"), "wr+")
     channel = json.load(channeljson)
     channel["Init"] = ctx.channel.id
     saveJSON(str("Guilds/"+ctx.guild.id+".json"), channel)
