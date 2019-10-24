@@ -59,6 +59,11 @@ async def cmd_setInit(ctx):
     e = discord.Embed(title="Registered Init Channel", description="This message will now be used to notify of Prysm's online status.", colour=discord.Colour.from_rgb(172, 85, 172))
     await bot.get_channel(channel["Init"]).send(embed=e)
 
+@bot.command(name="reminder", help="Set a reminder from the specified time, every x hours/minutes/seconds with the specified message. Requires the 'manage channels' permission.")
+@discord.ext.commands.has_permissions(manage_channels=True)
+async def cmd_reminder(ctx, ):
+
+
 @bot.command(name="restart", help="Pulls in latest git code and restarts to load it in. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
