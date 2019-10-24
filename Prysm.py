@@ -1,26 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#  Prysm.py
-#
-#  Copyright 2019  Riven Skaye / FokjeM
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
-#
+
 import os
 import subprocess
 import sys
@@ -55,7 +34,6 @@ async def on_ready():
             with open(str("Guilds/"+str(guild.id)+".json")) as gjson:
                 g = json.load(gjson)
                 if len(str(g["Init"])) > 0:
-                    print(g)
                     e = discord.Embed(title="Prysm started", description="This is a message to let all users know Prysm is online and receptive for input.", colour=discord.Colour.from_rgb(172, 85, 172))
                     await bot.get_channel(g["Init"]).send(embed=e)
     # Once the loop's done, we save all servers we're in now.
