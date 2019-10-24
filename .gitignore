@@ -1,1 +1,8 @@
+##Privacy and functioning related files##
 Prysm.json
+Guilds/*.json
+
+##IDE / Dev env files##
+###Komodo IDE/Edit###
+*.komodoproject
+.komodotools
