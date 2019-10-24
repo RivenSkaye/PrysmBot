@@ -17,6 +17,7 @@ It looks like this:
 Guilds is left intentionally blank, it'll be filled out by the bot when starting and encountering new guilds/servers.
 
 You can run this on any machine running Python 3.x
+
 _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and `python3` otherwise_
 - `pip install -U discord.py`
 - `python Prysm.py`
