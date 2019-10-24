@@ -49,17 +49,15 @@ bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, comm
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(name="the boss", type=discord.ActivityType.listening))
     for guild in bot.guilds:
-        if str(guild.id) in guilds.keys():
-            print("Guild found: %s" % guilds[str(guild.id)])
-        else:
-            print("New guild! %s" % guild.name)
+        if str(guild.id) not in guilds.keys():
             guilds[str(guild.id)] = guild.name
-            print(guilds)
-        if os.path.isfile(str("Gulds/"+str(guild.id)+".json")):
-            with open(str("Guilds/"+guild.id+".json")) as gjson:
-                g = json.load(g.json)
-                e = discord.Embed(title="Prysm started", description="This is a message to let all users know Prysm is online and receptive for input.", colour=discord.Colour.from_rgb(172, 85, 172))
-                await bot.send_message(bot.get_channel(g["Init"]), embed=e)
+        if os.path.isfile(str("Guilds/"+str(guild.id)+".json")):
+            with open(str("Guilds/"+str(guild.id)+".json")) as gjson:
+                g = json.load(gjson)
+                if len(str(g["Init"])) > 0:
+                    print(g)
+                    e = discord.Embed(title="Prysm started", description="This is a message to let all users know Prysm is online and receptive for input.", colour=discord.Colour.from_rgb(172, 85, 172))
+                    await bot.get_channel(g["Init"]).send(embed=e)
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
 
@@ -76,32 +74,30 @@ async def cmd_setInit(ctx):
     if not os.path.isfile(guildfile):
         with open(guildfile, "w+") as f:
             f.write("{}")
-    channeljson = open(guildfile, "wr+")
-    channel = json.load(channeljson)
+    with open(guildfile, "r") as gf:
+        channel = json.load(gf)
     channel["Init"] = ctx.channel.id
     saveJSON(guildfile, channel)
     e = discord.Embed(title="Registered Init Channel", description="This message will now be used to notify of Prysm's online status.", colour=discord.Colour.from_rgb(172, 85, 172))
-    await bot.send_message(bot.get_channel(channel["Init"]), embed=e)
+    await bot.get_channel(channel["Init"]).send(embed=e)
 
 @bot.command(name="restart", help="Pulls in latest git code and restarts to load it in. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
     saveJSON("Prysm.json", base_info)
-    p = subprocess.Popen(["git", "pull"])
     await ctx.channel.send("I'm now updating and restarting. As soon as I'm back, you can use me again!")
-    p.wait()
+    subprocess.Popen(["git", "pull"]).wait()
     os.execv(sys.executable, ["python"]+sys.argv)
 
 @bot.command(name="exit", help="Calls all closing methods on the bot, shutting it down. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_exit(ctx):
     await ctx.channel.send("Prysm off, glad to be of service!")
-    await bot_exit(0)
+    await bot_exit()
 
 async def bot_exit(status=0):
     saveJSON("Prysm.json", base_info)
     await bot.close()
-    exit(status)
 
 def saveJSON(jsonFile, data):
     with open(jsonFile, "w") as jsonHandle:
