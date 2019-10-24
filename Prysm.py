@@ -72,10 +72,14 @@ async def on_command_error(ctx, err):
 @bot.command(name="setInit", help="Sets what channel to send a message signaling the bot is online. Requires the 'manage channels' permission.", pass_context=True)
 @discord.ext.commands.has_permissions(manage_channels=True)
 async def cmd_setInit(ctx):
-    channeljson = open(str("Guilds/"+ctx.guild.id+".json"), "wr+")
+    guildfile = str("Guilds/"+str(ctx.guild.id)+".json")
+    if not os.path.isfile(guildfile):
+        with open(guildfile, "w+") as f:
+            f.write("{}")
+    channeljson = open(guildfile, "wr+")
     channel = json.load(channeljson)
     channel["Init"] = ctx.channel.id
-    saveJSON(str("Guilds/"+ctx.guild.id+".json"), channel)
+    saveJSON(guildfile, channel)
     e = discord.Embed(title="Registered Init Channel", description="This message will now be used to notify of Prysm's online status.", colour=discord.Colour.from_rgb(172, 85, 172))
     await bot.send_message(bot.get_channel(channel["Init"]), embed=e)
 
