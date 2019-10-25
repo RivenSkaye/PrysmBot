@@ -21,3 +21,9 @@ You can run this on any machine running Python 3.x
 _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and `python3` otherwise_
 - `pip install -U discord.py`
 - `python Prysm.py`
+
+## Dependencies
+The bot has some external dependecies for certain components. These are listed here with their `pip3` names.
+
+For the reminder functionality:
+- apscheduler
