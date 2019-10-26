@@ -10,7 +10,7 @@ an elevated command prompt (run as admin) or if you run it as root or with sudo
 
 import subprocess
 
-dependencies = ["apscheduler"]
+dependencies = ["discord.py", "apscheduler"]
 for dep in dependencies:
     try:
         subprocess.Popen(["pip3", "install", "-U", dep]).wait()
