@@ -28,5 +28,8 @@ An install script has been provided as `dep_install.py`. It assumes `python3` an
 On a \*NIX system, execute the script directly with `./dep_install.py`, or with whatever points to your python3 install.
 On Windows, run it with the local python3 install.
 ### Dependencies per functionality
+General functioning of any Discord bot:
+- discord.py
+
 For the reminder functionality:
 - apscheduler
