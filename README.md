@@ -23,7 +23,10 @@ _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and 
 - `python Prysm.py`
 
 ## Dependencies
-The bot has some external dependecies for certain components. These are listed here with their `pip3` names.
-
+The bot has some external dependencies for certain components. These are listed here with their `pip3` names.
+An install script has been provided as `dep_install.py`. It assumes `python3` and `pip3` as the executables are usually called.
+On a \*NIX system, execute the script directly with `./dep_install.py`, or with whatever points to your python3 install.
+On Windows, run it with the local python3 install.
+### Dependencies per functionality
 For the reminder functionality:
 - apscheduler
