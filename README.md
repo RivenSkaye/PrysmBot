@@ -1,12 +1,13 @@
 # An open source Discord utility bot written in Python 3.x
 
 This is a personal use bot and isn't hosted anywhere as of yet.
-If hosting for multiple servers becomes a viable option, it might be offered.
+If hosting publicly becomes a viable option, it might be offered.
 
 ## Hosting it yourself
-You are required to supply the token in the bare Prysm.json that's generated at first start.
+You are required to supply the token in the bare Prysm.json that's included as an untracked file in this repo.
+If it gets deleted, Prysm will create a new, file with _empty_ fields.
 Prysm can't and won't do anything if you haven't supplied the token.
-### _You can create Prysm.json in the same directory as Prysm.py with the Token supplied to sail smoothly from first start._
+### _You can fill in Prysm.json with the Token for your bot account to sail smoothly from first start._
 It looks like this:
 ```json
 {
@@ -28,8 +29,7 @@ An install script has been provided as `dep_install.py`. It assumes `python3` an
 On a \*NIX system, execute the script directly with `./dep_install.py`, or with whatever points to your python3 install.
 On Windows, run it with the local python3 install.
 ### Dependencies per functionality
-General functioning of any Discord bot:
-- discord.py
-
-For the reminder functionality:
-- apscheduler
+| Dependency  |     Functionality     |
+|-------------|-----------------------|
+| discord.py  | Discord bot functions |
+| apscheduler | Reminder functions    |
