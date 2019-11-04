@@ -11,6 +11,7 @@ import subprocess
 import sys
 import json
 import math
+import argparse
 # Discord libraries
 import discord
 import discord.ext.commands

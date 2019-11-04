@@ -33,3 +33,7 @@ General functioning of any Discord bot:
 
 For the reminder functionality:
 - apscheduler
+
+## Optional modules
+The bot will have several optional modules that can be _activated_ by passing the corresponding arguments on initialization.
+- Feedparser for the rss module. Pass `-rss`
