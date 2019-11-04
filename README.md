@@ -36,4 +36,13 @@ For the reminder functionality:
 
 ## Optional modules
 The bot will have several optional modules that can be _activated_ by passing the corresponding arguments on initialization.
+This will list the dependencies, for what module and with what options.
 - Feedparser for the rss module. Pass `-rss`
+#### RSS module
+The RSS module takes existing Webhooks and assigns a listener for RSS feeds to it. The host needs to supply the data!
+It requires a JSON file to specify what feed goes with what webhook. Like the Prysm.json, the bot will make this itself if it has to.
+```json
+{
+    "<RSS URL>": "<Webhook URL>"
+}
+```
