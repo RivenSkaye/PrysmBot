@@ -20,7 +20,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 # Make sure we can find all files by having the working directory set to the bot's directory
 os.chdir(sys.path[0])
 
-try :
+try:
     with open("Prysm.json", "r") as prysmjson:
         base_info = json.load(prysmjson)
         assert (len(base_info["Token"]) > 0), "No token given! Fix your Prysm.json!"
@@ -32,9 +32,19 @@ except FileNotFoundError:
 except AssertionError:
     print("No token given! Fix your Prysm.json!")
     exit(1)
+try:
+    # I assume people supplying a Prysm.json use correct keys, values and capitalization.
+    # They are not immune to mistakes though, so we catch those here if they did supply a token. And we warn them about it.
+    assert Guilds in base_info, "No Guilds object found!"
+    guilds = base_info["Guilds"]
+    assert isinstance(guilds, dict)
+except AssertionError as e:
+    print("Guilds wasn't an object, this has been fixed.\r\nMessage: %s" % e.args[0])
+    base_info["Guilds"] = {};
+    guilds = base_info["Guilds"]
+    saveJSON("Prysm.json", base_info)
 
-guilds = base_info["Guilds"]
-bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
+bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=">")
 scheduler = AsyncIOScheduler({'apscheduler.timezone': 'UTC'})
 
 @bot.event
