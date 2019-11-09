@@ -84,7 +84,7 @@ async def on_ready():
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
     # Check if the -rss option was set and how often we should check
-    if given_args["-rss"] not is False:
+    if given_args["-rss"] is not False:
         hrs="*"
         if given_args["-rss"] is True: # It's default, every 5 min
             given_args["-rss"] = 5
