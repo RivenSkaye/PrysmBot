@@ -3,6 +3,12 @@
 """
 A utility bot for Discord.
 Current functionality is limited to
+- exit() - including the steps to neatly kill the bot
+- restart() - pull in updates from git and restart itself. Only works in *NIX envs
+- setInit() - Send a message to the channels this was last called whenever we get back online. One channel per server.
+- reminder() - send a reminder every x hours, on a cron schedule. UTC-based to prevent DST issues
+
+- Optional Webhook spamming for RSS feeds. 
 Author: RivenSkaye / FokjeM
 """
 # Builtins used
@@ -11,14 +17,27 @@ import subprocess
 import sys
 import json
 import math
-import argparse
 # Discord libraries
 import discord
 import discord.ext.commands
 #External dependencies
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# Local imports
+import rss_reader
 # Make sure we can find all files by having the working directory set to the bot's directory
 os.chdir(sys.path[0])
+# Make a list of all possible optional arguments
+allowed_args = ["-rss"]
+# Make a dictionary of all given arguments. That allows an arbitrary order in using them
+given_args = {"-rss": False}
+for arg in sys.argv:
+    argset = arg.split("=")
+    if argset[0] in allowed_args:
+        if len(argset) > 1:
+            given_args[argset[0]] = int(argset[1])
+        else:
+            given_args[argset[0]] = True
+
 
 try:
     with open("Prysm.json", "r") as prysmjson:
@@ -34,7 +53,7 @@ except AssertionError:
     exit(1)
 try:
     # I assume people supplying a Prysm.json use correct keys, values and capitalization.
-    # They are not immune to mistakes though, so we catch those here if they did supply a token. And we warn them about it.
+    # They are not immune to mistakes though, so we catch those here if they did supply a valid token. And we warn them about it.
     assert Guilds in base_info, "No Guilds object found!"
     guilds = base_info["Guilds"]
     assert isinstance(guilds, dict)
@@ -64,6 +83,16 @@ async def on_ready():
                         scheduler.add_job(reminder_send, trigger='cron', args=[bot.get_channel(reminder[0]), reminder[1]], hour=reminder[2], minute=reminder[3], second=reminder[4])
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
+    # Check if the -rss option was set and how often we should check
+    if given_args["-rss"] not is False:
+        hrs="*"
+        if given_args["-rss"] is True: # It's default, every 5 min
+            given_args["-rss"] = 5
+        elif given_args["-rss"] >= 60:
+            given_args["-rss"] = given_args["-rss"]%60
+            hrs = "%s" % (given_args["-rss"]/60)
+        mins = "*/%s" % given_args["-rss"]
+        scheduler.add_job(rss_reader.rss_fetch, trigger='cron', args=[hour=hrs, minute=mins])
     # And start the scheduler
     scheduler.start()
 
