@@ -1,11 +1,13 @@
 # An open source Discord utility bot written in Python 3.x #
-
 This is a personal use bot and isn't hosted anywhere for the public, as of yet.  
 If hosting for multiple servers becomes a viable option, it might be offered. Feel free to message [me]()
 
 ## Hosting it yourself ##
 You are required to supply the token in the bare Prysm.json that's generated at first start.  
 **Prysm can't and won't do anything if you haven't supplied the token.**
+You are required to supply the token in the bare Prysm.json that's included as an untracked file in this repo.
+If it gets deleted, Prysm will create a new, file with _empty_ fields.
+Prysm can't and won't do anything if you haven't supplied the token.
 ### _You can create Prysm.json in the same directory as Prysm.py with the Token and a blank Guilds object supplied to sail smoothly from first start._ ###
 It looks like this:
 ```json
@@ -30,7 +32,7 @@ _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and 
 The bot has some external dependencies for certain components. These are listed here with their `pip3` names.  
 An install script has been provided as `dep_install.py`. It assumes `python3` and `pip3` as the executables are usually called.  
 On a \*NIX system, execute the script directly with `./dep_install.py`, or with whatever points to your python3 install.  
-On Windows, run it with the local python3 install.
+On Windows, run it with the local python3 install.  
 **Due to how python/pip works, it requires an elevated environment to run on at least Windows** (not tested on \*NIX-like)
 ### Dependencies per functionality ###
 General functioning of any Discord bot:
@@ -53,7 +55,12 @@ It requires a JSON file to specify what feed goes with what webhook. Like the Pr
     "<RSS URL>": "<Webhook URL>"
 }
 ```
-### Dependencies ###
-- feedparser
-- requests
-- python-dateutil
+### Dependencies per functionality
+| Dependency  |     Functionality     |
+|-------------|-----------------------|
+| discord.py  | Discord bot functions |
+| apscheduler | Reminder functions    |
+|-------------|-----------------------|
+| feedparser  | RSS Module            |
+| requests    | RSS Module            |
+|python-dateutil| RSS Module          |
