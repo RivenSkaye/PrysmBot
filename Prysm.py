@@ -45,7 +45,7 @@ try:
         assert (len(base_info["Token"]) > 0), "No token given! Fix your Prysm.json!"
 except FileNotFoundError:
     with open("Prysm.json", "w+") as prysmjson:
-        prysmjson.write("{\r\n    \"Token\": \"\",\r\n    \"Guilds\": {}\r\n}")
+        prysmjson.write("{\n    \"Token\": \"\",\n    \"Guilds\": {}\n}")
         print("There was no Prysm.json found; It was created, now add the Token for the bot.")
     exit(1)
 except AssertionError:
@@ -54,7 +54,7 @@ except AssertionError:
 try:
     # I assume people supplying a Prysm.json use correct keys, values and capitalization.
     # They are not immune to mistakes though, so we catch those here if they did supply a valid token. And we warn them about it.
-    assert Guilds in base_info, "No Guilds object found!"
+    assert "Guilds" in base_info, "No Guilds object found!"
     guilds = base_info["Guilds"]
     assert isinstance(guilds, dict)
 except AssertionError as e:
@@ -92,7 +92,7 @@ async def on_ready():
             given_args["-rss"] = given_args["-rss"]%60
             hrs = "%s" % (given_args["-rss"]/60)
         mins = "*/%s" % given_args["-rss"]
-        scheduler.add_job(rss_reader.rss_fetch, trigger='cron', args=[hour=hrs, minute=mins])
+        scheduler.add_job(rss_reader.rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
     scheduler.start()
 

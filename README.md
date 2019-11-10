@@ -31,6 +31,7 @@ The bot has some external dependencies for certain components. These are listed 
 An install script has been provided as `dep_install.py`. It assumes `python3` and `pip3` as the executables are usually called.  
 On a \*NIX system, execute the script directly with `./dep_install.py`, or with whatever points to your python3 install.  
 On Windows, run it with the local python3 install.
+**Due to how python/pip works, it requires an elevated environment to run on at least Windows** (not tested on \*NIX-like)
 ### Dependencies per functionality ###
 General functioning of any Discord bot:
 - discord.py
@@ -41,8 +42,9 @@ For the reminder functionality:
 ## Optional modules ##
 The bot will have several optional modules that can be _activated_ by passing the corresponding arguments on initialization.  
 This will list the dependencies, for what module and with what options.
-- Feedparser for the rss module. Pass `-rss`
-#### RSS module
+These modules come with their own dependency installers. Run these the same as the base dependency handler.
+
+### RSS module ###
 The RSS module takes existing Webhooks and assigns a listener for RSS feeds to it. The host needs to supply the data!  
 You can send multiple feeds to the same Webhook, but you can't send one feed to multiple Webhooks as this would require either inefficient code or way too much effort.  
 It requires a JSON file to specify what feed goes with what webhook. Like the Prysm.json, the bot will make this itself if it has to.
@@ -51,3 +53,7 @@ It requires a JSON file to specify what feed goes with what webhook. Like the Pr
     "<RSS URL>": "<Webhook URL>"
 }
 ```
+### Dependencies ###
+- feedparser
+- requests
+- python-dateutil
