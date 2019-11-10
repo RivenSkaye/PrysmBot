@@ -1,6 +1,10 @@
 ##Privacy and functioning related files##
 Guilds/*.json
 
+##RSS info. Nobody cares about these
+RSS/*.json
+RSS/*.txt
+
 ##IDE / Dev env files##
 ###Komodo IDE/Edit###
 *.komodoproject
