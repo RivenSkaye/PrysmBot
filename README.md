@@ -42,19 +42,21 @@ For the reminder functionality:
 - apscheduler
 
 ## Optional modules ##
-The bot will have several optional modules that can be _activated_ by passing the corresponding arguments on initialization.  
+The bot will have several optional modules that can be _activated_ by passing the filename as arguments on initialization.  
 This will list the dependencies, for what module and with what options.
 These modules come with their own dependency installers. Run these the same as the base dependency handler.
 
 ### RSS module ###
 The RSS module takes existing Webhooks and assigns a listener for RSS feeds to it. The host needs to supply the data!  
 You can send multiple feeds to the same Webhook, but you can't send one feed to multiple Webhooks as this would require either inefficient code or way too much effort.  
-It requires a JSON file to specify what feed goes with what webhook. Like the Prysm.json, the bot will make this itself if it has to.
+It requires a JSON file to specify what feed goes with what webhook. Like the Prysm.json, the bot will make this itself if it finds none.
 ```json
 {
     "<RSS URL>": "<Webhook URL>"
 }
 ```
+Activate the module passing the argument `rss`
+
 ### Dependencies per functionality
 | Dependency  |     Functionality     |
 |-------------|-----------------------|
