@@ -26,7 +26,7 @@ except AssertionError:
 def keysort(val):
     return parse(val["published"])
 
-def rss_fetch():
+def rss_fetch(archive_only=False):
     try:
         with open("RSS/archive.txt", "r") as archive_file:
             archive = archive_file.read().split("\n")
@@ -59,8 +59,8 @@ def rss_fetch():
                     continue
                 if rel not in archive:
                     try:
-                        requests.post(url=feeds[feed], data=f"content={rel}", headers=HEADERS, timeout=30)
-                        archive.append(rel)
+                        if not archive_only:
+                            requests.post(url=feeds[feed], data=f"content={rel}", headers=HEADERS, timeout=30)
                         new_archive.append(rel)
                         with open("RSS/archive.txt", "a") as archive_file:
                             for line in new_archive:
