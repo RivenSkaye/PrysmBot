@@ -97,15 +97,17 @@ async def on_ready():
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
     # Check if the rss option was set and how often we should check
-    if given_args["rss"] is not False:
-        hrs="*"
-        if given_args["rss"] is True: # It's default, every 5 min
-            given_args["rss"] = 5
-        elif given_args["rss"] >= 60:
-            hrs = "*/%d" % math.floor((given_args["rss"]/60))
-            given_args["rss"] = given_args["rss"]%60 # Make sure we don't skip the remaining minutes if it's once every 184 for example
-        mins = "*/%d" % given_args["rss"]
-        scheduler.add_job(imports["rss"].rss_fetch, trigger='cron', hour=hrs, minute=mins)
+    if "rss" in given_args.keys():
+        if given_args["rss"] is not False:
+            hrs="*"
+            if given_args["rss"] is True: # It's default, every 5 min
+                given_args["rss"] = 5
+            elif given_args["rss"] >= 60:
+                hrs = "*/%d" % math.floor((given_args["rss"]/60))
+                given_args["rss"] = given_args["rss"]%60 # Make sure we don't skip the remaining minutes if it's once every 184 for example
+            mins = "*/%d" % given_args["rss"]
+            imports["rss"].rss_fetch()
+            scheduler.add_job(imports["rss"].rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
     scheduler.start()
 
