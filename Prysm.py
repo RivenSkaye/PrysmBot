@@ -17,24 +17,34 @@ import subprocess
 import sys
 import json
 import math
+import importlib
 # Discord libraries
 import discord
 import discord.ext.commands
 #External dependencies
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# Local imports
-import rss_reader
 # Make sure we can find all files by having the working directory set to the bot's directory
 os.chdir(sys.path[0])
 # Make a list of all possible optional arguments
-allowed_args = ["-rss"]
+allowed_args = {"int": ["rss"]}
 # Make a dictionary of all given arguments. That allows an arbitrary order in using them
-given_args = {"-rss": False}
+given_args = {}
 for arg in sys.argv:
     argset = arg.split("=")
-    if argset[0] in allowed_args:
+    if argset[0] in allowed_args["int"]:
+        importlib.import_module(argset[0])
         if len(argset) > 1:
             given_args[argset[0]] = int(argset[1])
+        else:
+            given_args[argset[0]] = True
+    if argset[0] in allowed_args["str"]:
+        if len(argset) > 1:
+            given_args[argset[0]] = str(argset[1])
+        else:
+            given_args[argset[0]] = True
+    if argset[0] in allowed_args["bool"]:
+        if len(argset) > 1:
+            given_args[argset[0]] = bool(argset[1])
         else:
             given_args[argset[0]] = True
 
@@ -83,15 +93,15 @@ async def on_ready():
                         scheduler.add_job(reminder_send, trigger='cron', args=[bot.get_channel(reminder[0]), reminder[1]], hour=reminder[2], minute=reminder[3], second=reminder[4])
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
-    # Check if the -rss option was set and how often we should check
-    if given_args["-rss"] is not False:
+    # Check if the rss option was set and how often we should check
+    if given_args["rss"] is not False:
         hrs="*"
-        if given_args["-rss"] is True: # It's default, every 5 min
-            given_args["-rss"] = 5
-        elif given_args["-rss"] >= 60:
-            given_args["-rss"] = given_args["-rss"]%60
-            hrs = "%s" % (given_args["-rss"]/60)
-        mins = "*/%s" % given_args["-rss"]
+        if given_args["rss"] is True: # It's default, every 5 min
+            given_args["rss"] = 5
+        elif given_args["rss"] >= 60:
+            hrs = "*/%d" % math.floor((given_args["rss"]/60))
+            given_args["rss"] = given_args["rss"]%60 # Make sure we don't skip the remaining minutes if it's once every 184 for example
+        mins = "*/%d" % given_args["rss"]
         scheduler.add_job(rss_reader.rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
     scheduler.start()
