@@ -29,10 +29,11 @@ os.chdir(sys.path[0])
 allowed_args = {"int": ["rss"]}
 # Make a dictionary of all given arguments. That allows an arbitrary order in using them
 given_args = {}
+imports = {}
 for arg in sys.argv:
     argset = arg.split("=")
     if argset[0] in allowed_args["int"]:
-        importlib.import_module(argset[0])
+        imports[argset[0]] = importlib.import_module(argset[0])
         if len(argset) > 1:
             given_args[argset[0]] = int(argset[1])
         else:
@@ -104,7 +105,7 @@ async def on_ready():
             hrs = "*/%d" % math.floor((given_args["rss"]/60))
             given_args["rss"] = given_args["rss"]%60 # Make sure we don't skip the remaining minutes if it's once every 184 for example
         mins = "*/%d" % given_args["rss"]
-        scheduler.add_job(rss_reader.rss_fetch, trigger='cron', hour=hrs, minute=mins)
+        scheduler.add_job(imports["rss"].rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
     scheduler.start()
 
