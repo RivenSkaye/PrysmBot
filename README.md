@@ -62,6 +62,8 @@ Activate the module passing the argument `rss`
 |-------------|-----------------------|
 | discord.py  | Discord bot functions |
 | apscheduler | Reminder functions    |
+
+| Dependency  | Per module            |
 |-------------|-----------------------|
 | feedparser  | RSS Module            |
 | requests    | RSS Module            |
