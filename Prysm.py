@@ -26,7 +26,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 # Make sure we can find all files by having the working directory set to the bot's directory
 os.chdir(sys.path[0])
 # Make a list of all possible optional arguments
-allowed_args = {"int": ["rss"]}
+allowed_args = {"int": ["rss"], "str": [], "bool": []}
 # Make a dictionary of all given arguments. That allows an arbitrary order in using them
 given_args = {}
 imports = {}
@@ -38,12 +38,12 @@ for arg in sys.argv:
             given_args[argset[0]] = int(argset[1])
         else:
             given_args[argset[0]] = True
-    if argset[0] in allowed_args["str"]:
+    elif argset[0] in allowed_args["str"]:
         if len(argset) > 1:
             given_args[argset[0]] = str(argset[1])
         else:
             given_args[argset[0]] = True
-    if argset[0] in allowed_args["bool"]:
+    elif argset[0] in allowed_args["bool"]:
         if len(argset) > 1:
             given_args[argset[0]] = bool(argset[1])
         else:
