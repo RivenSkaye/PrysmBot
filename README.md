@@ -55,7 +55,9 @@ It requires a JSON file to specify what feed goes with what webhook. Like the Pr
     "<RSS URL>": "<Webhook URL>"
 }
 ```
-Activate the module passing the argument `rss`
+Activate the module passing the argument `rss`.
+To set a specific time between two polls on an RSS feed, set a value in minutes. E.g.: `python3 Prysm.py rss=180`.
+Schedules using the cron trigger for apscheduler, meaning that it runs at predefined _times_. Default is every 5 minutes from the start of an hour.
 
 ### Dependencies per functionality
 | Dependency  |     Functionality     |
