@@ -78,6 +78,8 @@ scheduler = AsyncIOScheduler({'apscheduler.timezone': 'UTC'})
 
 @bot.event
 async def on_ready():
+    for job in scheduler.get_jobs(): # If the bot has been disconnected, the ready event fires again and messes with the jobscheduler
+        job.remove()
     await bot.change_presence(activity=discord.Activity(name="the boss", type=discord.ActivityType.listening))
     for guild in bot.guilds:
         if str(guild.id) not in guilds.keys():
@@ -171,6 +173,7 @@ async def reminder_send(channel, msg):
 @bot.command(name="restart", help="Pulls in latest git code and restarts to load it in. Admins only!", pass_context=True)
 @discord.ext.commands.has_permissions(administrator=True)
 async def cmd_restart(ctx):
+    scheduler.shutdown(wait=False)
     saveJSON("Prysm.json", base_info)
     await ctx.channel.send("I'm now updating and restarting. As soon as I'm back, you can use me again!")
     subprocess.Popen(["git", "pull"]).wait()
@@ -185,6 +188,7 @@ async def cmd_exit(ctx):
 
 async def bot_exit(status=0):
     saveJSON("Prysm.json", base_info)
+    scheduler.shutdown(wait=False)
     await bot.close()
 
 def saveJSON(jsonFile, data):

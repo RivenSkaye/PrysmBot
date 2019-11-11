@@ -66,5 +66,5 @@ def rss_fetch():
                             for line in new_archive:
                                 archive_file.write(f"{line}\n")
                     except Exception as e:
-                        print(e)
+                        print("Could not get the RSS feed!\r\n%s" % e)
                         continue # There may not be any more code in this loop.
