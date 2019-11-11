@@ -74,7 +74,7 @@ except AssertionError as e:
     guilds = base_info["Guilds"]
     saveJSON("Prysm.json", base_info)
 
-bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=">")
+bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
 scheduler = AsyncIOScheduler({'apscheduler.timezone': 'UTC'})
 
 @bot.event
