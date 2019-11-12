@@ -49,6 +49,9 @@ for arg in sys.argv:
         else:
             given_args[argset[0]] = True
 
+def saveJSON(jsonFile, data):
+    with open(jsonFile, "w") as jsonHandle:
+        json.dump(data, jsonHandle, indent=4)
 
 try:
     with open("Prysm.json", "r") as prysmjson:
@@ -57,7 +60,7 @@ try:
 except FileNotFoundError:
     with open("Prysm.json", "w+") as prysmjson:
         prysmjson.write("{\n    \"Token\": \"\",\n    \"Guilds\": {}\n}")
-        print("There was no Prysm.json found; It was created, now add the Token for the bot.")
+        print("There was no Prysm.json found! It was created, now add the Token for the bot.")
     exit(1)
 except AssertionError:
     print("No token given! Fix your Prysm.json!")
@@ -66,22 +69,24 @@ try:
     # I assume people supplying a Prysm.json use correct keys, values and capitalization.
     # They are not immune to mistakes though, so we catch those here if they did supply a valid token. And we warn them about it.
     assert "Guilds" in base_info, "No Guilds object found!"
-    guilds = base_info["Guilds"]
-    assert isinstance(guilds, dict)
+    assert isinstance(base_info["Guilds"], dict)
 except AssertionError as e:
-    print("Guilds wasn't an object, this has been fixed.\r\nMessage: %s" % e.args[0])
+    print("Guilds wasn't an object, this has been fixed.\r\nMessage: %s" % e)
     base_info["Guilds"] = {};
-    guilds = base_info["Guilds"]
-    saveJSON("Prysm.json", base_info)
+guilds = base_info["Guilds"]
+saveJSON("Prysm.json", base_info)
 
 bot = discord.ext.commands.Bot(max_messages=0, fetch_offline_members=False, command_prefix=";")
 scheduler = AsyncIOScheduler({'apscheduler.timezone': 'UTC'})
 
 @bot.event
 async def on_ready():
-    for job in scheduler.get_jobs(): # If the bot has been disconnected, the ready event fires again and messes with the jobscheduler
-        job.remove()
-    await bot.change_presence(activity=discord.Activity(name="the boss", type=discord.ActivityType.listening))
+    try:
+        for job in scheduler.get_jobs(): # If the bot has been disconnected, the ready event fires again and messes with the jobscheduler
+            job.remove()
+    except:
+        print("No old jobs found")
+    set_act = bot.change_presence(activity=discord.Activity(name="the boss", type=discord.ActivityType.listening))
     for guild in bot.guilds:
         if str(guild.id) not in guilds.keys():
             guilds[str(guild.id)] = guild.name
@@ -94,6 +99,7 @@ async def on_ready():
                 if "Reminders" in g:
                     for reminder in g["Reminders"]:
                         scheduler.add_job(reminder_send, trigger='cron', args=[bot.get_channel(reminder[0]), reminder[1]], hour=reminder[2], minute=reminder[3], second=reminder[4])
+    await set_act
     # Once the loop's done, we save all servers we're in now.
     saveJSON("Prysm.json", base_info)
     # Check if the rss option was set and how often we should check
@@ -193,9 +199,5 @@ async def bot_exit(status=0):
     saveJSON("Prysm.json", base_info)
     scheduler.shutdown(wait=False)
     await bot.close()
-
-def saveJSON(jsonFile, data):
-    with open(jsonFile, "w") as jsonHandle:
-        json.dump(data, jsonHandle, indent=4)
 
 bot.run(base_info["Token"])

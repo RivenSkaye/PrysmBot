@@ -36,7 +36,7 @@ def rss_fetch(archive_only=False):
     new_archive = []
     for feed in feeds.keys():
         try:
-            data = requests.get(url=feed, timeout=30).text
+            data = requests.get(url=feed, timeout=20).text
         except:
             data = None
         if data:
@@ -60,7 +60,7 @@ def rss_fetch(archive_only=False):
                 if rel not in archive:
                     try:
                         if not archive_only:
-                            requests.post(url=feeds[feed], data=f"content={rel}", headers=HEADERS, timeout=30)
+                            requests.post(url=feeds[feed], data=f"content={rel}", headers=HEADERS, timeout=20)
                         new_archive.append(rel)
                         with open("RSS/archive.txt", "a") as archive_file:
                             for line in new_archive:
