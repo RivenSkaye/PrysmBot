@@ -1,6 +1,9 @@
 # An open source Discord utility bot written in Python 3.x #
 This is a personal use bot and isn't hosted anywhere for the public, as of yet.  
-If hosting for multiple servers becomes a viable option, it might be offered. Feel free to message [me]()
+If hosting for multiple servers becomes a viable option, it might be offered.
+
+For questions, problems, tips or being social, feel free to drop by [in Prysm's home server](https://discord.gg/7sFRUtH)  
+~~we have a waifu roulette~~
 
 ## Hosting it yourself ##
 You are required to supply the token in the bare Prysm.json that's generated at first start.  
@@ -22,7 +25,7 @@ You can run this on any machine running Python 3.x
 This bot does not and will not log anything. If you want that, output stdout and stderr to a file.
 - Any POSIX-compliant CLI: `python Prysm.py >> err.log 2>&1`.
 - Newer versions of Bash may also use `python Prysm.py &> err.log`
-- I don't explicitly support other shells. Open a PR or an Issue and _offer instructions to add_.
+- I don't explicitly support other shells. Open a PR or an [issue](https://github.com/FokjeM/PrysmBot/issues/new) and _offer instructions to add_.
 
 _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and `python3` otherwise._
 - `pip3 install -U discord.py`
