@@ -15,5 +15,5 @@ for dep in dependencies:
     try:
         subprocess.Popen(["pip3", "install", "-U", dep]).wait()
     except Exception as e:
-        print("Error installing package: %s\r\n\tMessage: %s" % (dep, e))
+        print("Error installing package: %s\n\tMessage: %s" % (dep, e))
 print("Done installing dependencies; Please make sure you keep Prysm up to date!")
