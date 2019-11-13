@@ -112,6 +112,8 @@ async def on_ready():
                 hrs = "*/%d" % math.floor((given_args["rss"]/60))
                 given_args["rss"] = given_args["rss"]%60 # Make sure we don't skip the remaining minutes if it's once every 184 for example
             mins = "*/%d" % given_args["rss"]
+            if mins == "*/0":
+                mins = "0"
             imports["rss"].rss_fetch()
             scheduler.add_job(imports["rss"].rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
