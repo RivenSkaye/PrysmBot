@@ -28,7 +28,7 @@ This bot does not and will not log anything. If you want that, output stdout and
 - I don't explicitly support other shells. Open a PR or an [issue](https://github.com/FokjeM/PrysmBot/issues/new) and _offer instructions to add_.
 
 _Assuming Python 3.x and Pip 3.x are configured as the defaults, use `pip3` and `python3` otherwise._
-- `pip3 install -U discord.py`
+- `pip install -U discord.py`
 - `python Prysm.py`
 
 ## Dependencies ##
