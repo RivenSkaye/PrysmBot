@@ -8,7 +8,7 @@ Current functionality is limited to
 - setInit() - Send a message to the channels this was last called whenever we get back online. One channel per server.
 - reminder() - send a reminder every x hours, on a cron schedule. UTC-based to prevent DST issues
 
-- Optional Webhook spamming for RSS feeds. 
+- Optional Webhook spamming for RSS feeds.
 Author: RivenSkaye / FokjeM
 """
 # Builtins used
@@ -118,6 +118,7 @@ async def on_ready():
             scheduler.add_job(imports["rss"].rss_fetch, trigger='cron', hour=hrs, minute=mins)
     # And start the scheduler
     scheduler.start()
+    print("Bot alive, this is go")
 
 # async def initMessage(guild, channel):
 @bot.event
@@ -125,7 +126,9 @@ async def on_command_error(ctx, err):
     if isinstance(err, discord.ext.commands.MissingPermissions):
         await ctx.channel.send("Sorry %s, it seems you lack the permission %s" % (ctx.author.mention(), err.missing_perms))
     else:
-        await ctx.channel.send("Sorry, something went wrong, other than permissions.\r\nMessage: %s" % err)
+        #await ctx.channel.send(f"Sorry, something went wrong, other than permissions.\r\nMessage: {err}\r\n{ctx.message.content}")
+        testbed = discord.Embed(title='Sorry!', description=f'Something went wrong, other than permissions.\r\n{ctx.message.content.encode().decode("unicode_escape")}')
+        await ctx.channel.send(embed=testbed)
 
 @bot.command(name="setInit", help="Sets what channel to send a message signaling the bot is online. Requires the 'manage channels' permission.", pass_context=True)
 @discord.ext.commands.has_permissions(manage_channels=True)
