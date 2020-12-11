@@ -3,12 +3,16 @@ RSS Reading cog for sending RSS feed information to Webhooks.
 This was built with the intent of sending stuff to Discord servers.
 Author: RivenSkaye / FokjeM
 Special thanks: Nala_Alan
-                ngl, most of the code is his, with tweaks to fit my use case.
-                This is about to be rewritten for nice JSON + POST webhooks.
+                The original code was his, rewritten to be callable from a
+                Discord bot. It has since been rewritten again to use his
+                base workflow, but heavily modified and with JSON requests
+                to the Discord WebHooks rather than HTTP form data
 """
 # No import for the cog system, this should just run without any commands.
 # Built-ins
+import asyncio
 import json
+from time import sleep # Used to prevent getting blocked for too many requests
 # Dependencies
 import feedparser
 import requests
@@ -73,11 +77,12 @@ class Prysm_RSS:
                                 For more info, consult Discord's docs:
                                 https://discord.com/developers/docs/resources/webhook#execute-webhook
 
-    :return: int:               0 on success. 1 if a feed doesn't work,
+    :return: int:               0 on success.
+                                1 if a feed doesn't work,
                                 2 if a webhook doesn't respond.
                                 3 means PANIC MODE.
     """
-    def rss_fetch(self, feed: str, path: str, archive: str, webhook: str, archive_only: bool=False, **kwargs) -> int:
+    async def rss_fetch(self, feed: str, path: str, archive: str, webhook: str, archive_only: bool=False, **kwargs) -> int:
         try:
             data = requests.get(url=feed, timeout=7.5).text # Timeout after 7.5s.
         except:
@@ -86,7 +91,6 @@ class Prysm_RSS:
             ignored = ["content", "file", "payload_json"]
             with open(path+archive, "r") as arch:
                 old_archive = [val for val in arch.read().split('\n') if val]
-            print(old_archive)
             new_archive = []
             for release in sorted(feedparser.parse(data).entries, key=keysort):
                 # Grab the correct identifier name, which is something like these
@@ -127,17 +131,35 @@ class Prysm_RSS:
         # If due to a freak accident we got an empty string
         return 3
 
-    def fetch_all(self, archive_only: bool=False):
+    """
+    Loops over all feeds listed in the feeds file. Allows to set a limit to
+    limit the amount of requests made per second.
+
+    :param limit: int:          The limit on the amount of requests to send
+                                per second. Set to 0 to disable.
+                                Use this parameter to prevent sending too many
+                                requests to a feed and getting blocked.
+                                Defaults to 500 requests per second.
+    :param archive_only: bool:  Passed through to the singular rss_fetch.
+                                Defaults to False.
+    """
+    async def fetch_all(self, limit: int=500, archive_only: bool=False):
         with open(self.path+self.file) as rssjson:
             webhooks = json.load(rssjson)
+        codes = []
         for webhook in webhooks.keys():
             for feed in webhooks[webhook]:
-                code = self.rss_fetch(feed, self.path, self.archive, webhook, False)
-                if code == 0:
-                    continue
-                if code == 1:
-                    webhooks[webhook].pop(feed, None)
-                elif code == 2:
-                    webhooks.pop(webhook, None)
-                elif code == 3:
-                    print(f"For some weird reason, the RSS feed at {feed} yields no results.\n\tPLEASE MONITOR!!")
+                codes.append(self.rss_fetch(feed, self.path, self.archive, webhook, False))
+            if limit > 0:
+                sleep(1/limit)
+        for result in codes:
+            code = await result
+            print(code)
+            if code == 0:
+                continue
+            if code == 1:
+                webhooks[webhook].pop(feed, None)
+            elif code == 2:
+                webhooks.pop(webhook, None)
+            elif code == 3:
+                print(f"For some weird reason, the RSS feed at {feed} yields no results.\n\tPLEASE MONITOR!!")
