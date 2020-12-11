@@ -1,7 +1,7 @@
 """
 RSS Reading cog for sending RSS feed information to Webhooks.
 This was built with the intent of sending stuff to Discord servers.
-Author: RivenSkaye / FokjeM
+Author: RivenSkaye
 Special thanks: Nala_Alan
                 The original code was his, rewritten to be callable from a
                 Discord bot. It has since been rewritten again to use his
@@ -14,6 +14,8 @@ import asyncio
 import json
 from time import sleep # Used to prevent getting blocked for too many requests
 # Dependencies
+from discord.ext import commands
+import discord
 import feedparser
 import requests
 from dateutil.parser import parse
@@ -163,3 +165,29 @@ class Prysm_RSS:
                 webhooks.pop(webhook, None)
             elif code == 3:
                 print(f"For some weird reason, the RSS feed at {feed} yields no results.\n\tPLEASE MONITOR!!")
+
+class RSS(commands.Cog):
+    """
+    RSS Cog for Prysm, this handles manipulating what feeds to fetch and
+    which Webhooks it should send the messages to.
+    Also handles some setup for creating new Webhooks to work with.
+    """
+    def __init__(self, bot):
+        self.bot = bot
+        self.COG_NAME = "RSS"
+        self.footer = "_RSS management is restricted to users that have both 'Manage Channel' and 'Manage Webhooks' permissions. Please keep this in mind when using commands in this cog._"
+
+    """
+    This is going to warn users that rss is not a command and then present them
+    with a nice list of all commands in this cog.
+    Calling this is basically giving out an error message!
+    """
+    @commands.group(invoke_without_command=True, cog_name="RSS", name="rss")
+    async def rss(self, ctx):
+        embedtext = "You have tried to call a command group as a command, this doesn't work unfortunately.\nThere's a set list of commands in this group that you _can_ use however."
+        commandlist = ""
+        for command in self.get_commands():
+            commandlist += f"- {command.name}\n"
+        e = discord.Embed(title="RSS Cog Info", type="rich", colour=discord.Colour.from_rgb(172, 43, 43), author=ctx.author, description=embedtext, footer=self.footer)
+        e.add_field(name="Commands in this cog:", value=commandlist)
+        ctx.channel.send(embed=e)
