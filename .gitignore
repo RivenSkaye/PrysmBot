@@ -1,5 +1,6 @@
 ##Privacy and functioning related files##
 Guilds/*.json
+*.sqlite3
 
 ##RSS info. Nobody cares about these
 RSS/*.json
