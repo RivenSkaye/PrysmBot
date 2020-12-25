@@ -5,7 +5,6 @@ Guilds/*.json
 ##RSS info. Nobody cares about these
 RSS/*.json
 RSS/*.txt
-RSS/*.log
 
 ##IDE / Dev env files##
 ###Komodo IDE/Edit###
