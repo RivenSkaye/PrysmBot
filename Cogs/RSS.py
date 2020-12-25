@@ -21,7 +21,6 @@ Special thanks: Nala_Alan
 import asyncio
 import json
 from typing import Optional, Union
-from datetime import datetime
 # Dependencies
 import discord
 from discord.ext import commands
