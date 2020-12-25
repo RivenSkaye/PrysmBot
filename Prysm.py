@@ -13,6 +13,7 @@ from typing import Dict, List, Any, Union
 import os
 import json
 import asyncio
+import sqlite3
 # Discord libraries
 import discord
 import discord.ext.commands
