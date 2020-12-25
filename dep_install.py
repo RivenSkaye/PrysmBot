@@ -14,7 +14,7 @@ import subprocess
 dependencies = ["discord.py", "apscheduler"]
 for dep in dependencies:
     try:
-        subprocess.Popen(["python3.8", '-m', "pip", "install", "-U", dep]).wait()
+        subprocess.Popen(["python38", '-m', "pip", "install", "-U", dep]).wait()
     except Exception as e:
         print("Error installing package: %s\n\tMessage: %s" % (dep, e))
 print("Done installing dependencies; Please make sure you keep Prysm up to date!")
