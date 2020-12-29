@@ -21,13 +21,12 @@ Special thanks: Nala_Alan
 import asyncio
 import json
 from typing import Optional, Union
+from datetime import datetime, timezone
 # Dependencies
 import discord
 from discord.ext import commands
 import aiohttp
 import feedparser
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler import triggers
 
 def keysort(val):
     """ Nala_Alan's keysort function. Meant to be used as a callback.
@@ -223,7 +222,7 @@ class RSS(commands.Cog):
             for webhook in webhooks:
                 hook = f"**{webhook.name}**. id: {webhook.id}, channel: {webhook.channel}.\n"
                 hooks.append(hook)
-            msgs = bot.split_messages(hooks)
+            msgs = bot._split_messages(hooks)
             for msg in msgs:
                 await ctx.send(msg)
 
@@ -246,7 +245,7 @@ class RSS(commands.Cog):
             feeds = []
             for wh in guildhooks:
                 feeds.append(f"**{wh.name}** ({wh.channel}):\n{hooks[wh.url]}\n------------------")
-                msgs = bot.split_messages(feeds)
+                msgs = bot._split_messages(feeds)
                 for msg in msgs:
                     await ctx.send(msg)
 
@@ -261,22 +260,18 @@ class RSS(commands.Cog):
         :param hook: str:       For any Webhook in this guild: the id, URL, or name.
         :param interval: int:   The interval between fetches of the feed.
                                 provide time in minutes, with a minimum of 15.
-                                Ignored if a crontab is given instead
-        :param fromtime: str:   either "now" or a timestamp in "hh:mm:ss" format.
-                                defaults to "now" if omitted
-        :param crontab: str:    A valid crontab to run the command on.
-                                Bound to the same 15 minute constraint as interval,
-                                it gets checked for this!
         """
 
         # Prepare an error message for malformed use of the command.
         # The most probable issue is a malformed webhook identifier.
         # Not an RSS feed is its own beast and will be handled later.
-        errcontent = f"""Could not add {feed} to the list due to a problem with the given Webhook.\n
+        errcontent = f"""Could not add <{feed}> to the list due to a problem with the given Webhook.\n
         Due to the nature of Webhooks in Discord, names are case sensitive, the IDs are series of 13 numbers and URLs are without spaces.\n
         You can supply any one of these in the correct format to this function.\n\n
 
-        Please retry the command in the format `{ctx.prefix}{ctx.invoked_with} {feed} <Webhook name, ID, or URL> <interval in minutes>`."""
+        Please retry the command in the format `{ctx.prefix}{ctx.invoked_with} <{feed}> <Webhook name, ID, or URL> <interval>`."""
+        # Remove any link suppression
+        feed = feed.replace("<", "").replace(">", "")
         webhooks = await ctx.guild.webhooks()
         for wh in webhooks:
             if hook in [wh.id, wh.name, wh.url]:
@@ -287,6 +282,6 @@ class RSS(commands.Cog):
             await ctx.send(embed=e)
             return
         # We managed to find the Webhook, so now we set up shit to push to it.
-        date = datetime.now(datetime.timezone.utc)
+        date = datetime.now(timezone.utc)
         # Create a trigger and make something to save to DB here
         pass

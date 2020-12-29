@@ -10,6 +10,7 @@ memory footprint and should be small, fast tasks that can be mostly asynced.
 Author: RivenSkaye
 """
 from typing import Dict, List, Any, Union
+from collections.abc import Callable
 import os
 import json
 import asyncio
@@ -17,6 +18,9 @@ import sqlite3
 # Discord libraries
 import discord
 import discord.ext.commands
+# Cog dependencies, categorized. Remove these for cogs you don't run.
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.job import Job
 
 def _saveJSON(jsonFile: str, data: Dict[str, Any]):
     """Utility fuction to save data to a JSON file.
@@ -27,8 +31,8 @@ def _saveJSON(jsonFile: str, data: Dict[str, Any]):
     with open(jsonFile, "w") as jsonHandle:
         json.dump(data, jsonHandle, indent=4)
 
-async def split_messages(list_in, limit: int=1750) -> List:
-    """Internal utility function to split messages before they get too big.
+def _split_messages(list_in, limit: int=1750) -> List:
+    """Pagination function to split messages before they get too big.
     Leaves 250 chars of space to perform join and formatting operations.
 
     :param list: list_in:   The input list to process
@@ -44,13 +48,13 @@ async def split_messages(list_in, limit: int=1750) -> List:
         if len(msg) + len(str(entry)) <= limit:
             msg.append(str(entry))
         else:
-            ret = msg
+            ret.append(msg)
             msg = entry
     # Make sure to add the last message
     ret.append(msg)
     return ret
 
-async def _gen_err(command: str, content: str, member: discord.Member) -> discord.Embed:
+def _gen_err(command: str, content: str, member: discord.Member) -> discord.Embed:
     """Generator for error embeds, used throughout the bot.
 
     Standardizes the color and format. Takes in the message body as a whole,
@@ -64,8 +68,17 @@ async def _gen_err(command: str, content: str, member: discord.Member) -> discor
                          author=member,
                          footer="_Making mistakes is human. Seeing this message frequently just makes you **very** human._")
 
+def _schedule(scheduler: AsyncIOScheduler=None, trigger_type: str='interval', sched_kwargs: Dict=None, callback: Callable=None, func_kwargs: Dict=None) -> Job:
+    """Wrapper function to automate job scheduling all over the bot.
+
+    If it's not an AsyncIOScheduler, we're fucked.
+    This should be fine though, since all the schedulers used in the bot should
+    already be AsyncIOSchedulers. If not, blame the dev.
+    """
+    return scheduler.add_job(func=callback, trigger=trigger_type, coalesce=True, kwargs=func_kwargs, **sched_kwargs)
+
 def _gen_crontab(h: Union[int,str], m: Union[int,str], s: Union[int,str], freq: int=3, unit="h"):
-    """Generator for crontabs to be used with apscheduler.
+    """Generator for crontabs to be used with apscheduler. Might delete this.
 
     Takes an input time split by hours minutes and seconds and returns a valid
     crontab that repeats an action on every interval of frequency units.
@@ -124,7 +137,7 @@ try:
 except AssertionError as e:
     print(f"Guilds wasn't an object, this has been fixed.\r\nMessage: {e}")
     base_info["Guilds"] = {};
-    saveJSON("Prysm.json", base_info)
+    _saveJSON("Prysm.json", base_info)
 # Either we just fetched with no changes, or already saved it here
 guilds = base_info["Guilds"]
 # Initialize the bot and establish connection info
@@ -148,6 +161,6 @@ async def on_ready():
                     await bot.get_channel(g["Init"]).send(embed=e)
     await set_act
     # Once the loop's done, we save all servers we're in now.
-    saveJSON("Prysm.json", base_info)
+    _saveJSON("Prysm.json", base_info)
 
 bot.run(base_info["Token"])
