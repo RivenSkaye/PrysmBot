@@ -191,7 +191,7 @@ class RSS(commands.Cog):
                 rss.write("")
         return retval
 
-    @commands.group(invoke_without_command=True, case_insensitive=True, cog_name="RSS", name="rss")
+    @commands.group(pass_context=True, invoke_without_command=True, case_insensitive=True, cog_name="RSS", name="rss")
     @commands.has_guild_permissions(manage_channels=True, manage_webhooks=True)
     @commands.guild_only()
     async def rss(self, ctx):
@@ -200,13 +200,13 @@ class RSS(commands.Cog):
         with a nice list of all commands in this cog.
         Calling this is basically giving out a simplified help message!
         """
-        embedtext = "This command group has no base command unfortunately.\nThere's a set list of commands in this group that you _can_ use however. More info on these with `help rss <command>`"
+        embedtext = f"This command group has no base command.\nThere's a set list of commands in this group that you _can_ use however. More info on these with `{ctx.prefix}help rss <command>`"
         commandlist = ""
         for command in self.get_commands():
             commandlist += f"- {command.name}\n"
         e = discord.Embed(title="RSS Cog Info", type="rich", colour=discord.Colour.from_rgb(172, 43, 43), author=ctx.author, description=embedtext, footer=self.footer)
         e.add_field(name="Commands in this cog:", value=commandlist)
-        ctx.send(embed=e)
+        await ctx.send(embed=e)
 
     @rss.command(name='serverwebhooks', aliases=['servhooks', 'swh'])
     async def get_webhooks(self, ctx):
