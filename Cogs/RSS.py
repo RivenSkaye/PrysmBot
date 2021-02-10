@@ -7,14 +7,10 @@ using names and identifiers of their choice.
 Webhooks given are parsed and checked to be actual Discord links and
 present in the server they're added from.
 Author: RivenSkaye
-Special thanks: Nala_Alan
-                The original code was his, rewritten to be callable from a
+Special thanks: A friend who wishes to remain Anon
+                The original code was theirs, rewritten to be callable from a
                 Discord bot. It has since been rewritten again, but maintains
-                his core parsing code with a small added check to require an
-                identifier field. Nala_Alan's POST request has been replaced
-                to send a JSON payload and use aiohttp in order to fetch and
-                send the data asynchronously, to be non-blocking to the bot's
-                other coroutines.
+                their core parsing code with a small added check on the id/guid
 """
 
 # Built-ins
@@ -29,7 +25,7 @@ import aiohttp
 import feedparser
 
 def keysort(val):
-    """ Nala_Alan's keysort function. Meant to be used as a callback.
+    """ Generic keysort function. Meant to be used as a callback.
 
     We only need a single key to sort on, which is why we can't use just the
     built-in and instead need a simple wrapper func. Might a lambda be better?
