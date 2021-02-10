@@ -83,16 +83,10 @@ class Prysm_RSS:
                 # Grab the correct identifier name, which is something like these
                 if "guid" in relkeys:
                     rel = release["guid"]
-                elif "GUID" in relkeys:
-                    rel = release["GUID"]
                 elif "uid" in relkeys:
                     rel = release["guid"]
-                elif "UID" in relkeys:
-                    rel = release["GUID"]
                 elif "id" in rrelkeys:
                     rel = release["id"]
-                elif "ID" in relkeys:
-                    rel = release["ID"]
                 else: # No identifier we can recognize? Just drop it and die.
                     print(f"The feed located at {feed} does not provide a known common identifier for entries.\nIt can therefore not be parsed reliably for new entries.\n\tIt has been deleted.")
                     return 1;
