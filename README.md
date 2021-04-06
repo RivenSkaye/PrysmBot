@@ -1,3 +1,42 @@
+# EOL and Deprecation #
+Prysm had a good run as a testing grounds for me, but it was mostly just for me to poke around in discord.py to get the hang of what I'm doing.
+That said, I do plan to take what I've learned from this to a new bot project that I plan to actually develop. Except this time I'm doing it
+from the ground up and with the proper way of handling it from the start.
+
+Trying to port over the monolithic eternally running script to a class-based bot proved too annoying, especially since it didn't really work the way
+I'd wanted it to from the start and everything was a bit sluggish and massive. So I'm creating a new bot, Zwei.
+I'll edit in a link later on when I get started.
+
+Zwei will have the functions I envisioned Prysm would have, but with an identity and a clean start that will allow me to focus on the important
+bits and pieces. Namely the code, an actual database to back things and an organized structure to work on.
+I will make sure all local changes (working or not) get pushed to the dev branch so you can see why I've decided a clean start is better.
+
+## Main features for Zwei ##
+- Basic management like:
+    - A three-and-five-strike warning system. (Kick on the 3rd warn, ban on the 5th. If a user is re-added within a month, ban on every next as well)
+    - Channel locking
+    - Channel creation
+    - Muting of users
+    - Nickname changing
+    - Mute, Deafen and Move people in voice chats
+- GIF reactions, such as hugs and slaps. Basic stuff to convey how you feel with the power of anime gifs
+- Custom embed messages
+    - Later edits may be added sometime, but it's not exactly planned
+    - Easy to use syntax
+    - Generator tool might be provided as well
+- Welcome/greet messages
+- Goodbye messages
+- Subscribe to RSS feeds
+    - These will be fetched at set intervals
+    - The feeds will be saved in a global list so all servers recieve updates at the same time
+    - Select fields from the RSS feed to be notified of
+    - Sane defaults
+- Purge command (with a cooldown)
+
+_This list is just a preview, more stuff may be added._
+
+## Thanks to everyone who helped get Prysm and my basics for Discord bots started! ##
+
 # An open source Discord utility bot written in Python 3.x #
 This is a personal use bot and isn't hosted anywhere for the public, as of yet.  
 If hosting for multiple servers becomes a viable option, it might be offered.
