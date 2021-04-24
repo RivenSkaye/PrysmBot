@@ -4,7 +4,7 @@ That said, I do plan to take what I've learned from this to a new bot project th
 from the ground up and with the proper way of handling it from the start.
 
 Trying to port over the monolithic eternally running script to a class-based bot proved too annoying, especially since it didn't really work the way
-I'd wanted it to from the start and everything was a bit sluggish and massive. So I'm creating a new bot, [Zwei](https://github.com/RivenSkaye/ZweiBot].
+I'd wanted it to from the start and everything was a bit sluggish and massive. So I'm creating a new bot, [Zwei](https://github.com/RivenSkaye/ZweiBot).
 
 Zwei will have the functions I envisioned Prysm would have, but with an identity and a clean start that will allow me to focus on the important
 bits and pieces. Namely the code, an actual database to back things and an organized structure to work on.
@@ -12,7 +12,7 @@ I will make sure all local changes (working or not) get pushed to the dev branch
 
 ## Main features for Zwei ##
 - Basic management like:
-    - A three-and-five-strike warning system. (Kick on the 3rd warn, ban on the 5th. If a user is re-added within a month, ban on every next as well)
+    - A three-and-five-strike warning system
     - Channel locking
     - Channel creation
     - Muting of users
