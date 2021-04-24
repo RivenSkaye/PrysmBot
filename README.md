@@ -4,8 +4,7 @@ That said, I do plan to take what I've learned from this to a new bot project th
 from the ground up and with the proper way of handling it from the start.
 
 Trying to port over the monolithic eternally running script to a class-based bot proved too annoying, especially since it didn't really work the way
-I'd wanted it to from the start and everything was a bit sluggish and massive. So I'm creating a new bot, Zwei.
-I'll edit in a link later on when I get started.
+I'd wanted it to from the start and everything was a bit sluggish and massive. So I'm creating a new bot, [Zwei](https://github.com/RivenSkaye/ZweiBot].
 
 Zwei will have the functions I envisioned Prysm would have, but with an identity and a clean start that will allow me to focus on the important
 bits and pieces. Namely the code, an actual database to back things and an organized structure to work on.
@@ -33,7 +32,7 @@ I will make sure all local changes (working or not) get pushed to the dev branch
     - Sane defaults
 - Purge command (with a cooldown)
 
-_This list is just a preview, more stuff may be added._
+_This list is just a preview, stuff may be added or removed._
 
 ## Thanks to everyone who helped get Prysm and my basics for Discord bots started! ##
 
